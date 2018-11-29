@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"reflect"
+
 	"github.com/hashicorp/consul/agent/structs"
 	"github.com/hashicorp/go-msgpack/codec"
 	"github.com/hashicorp/raft"
 	"github.com/hashicorp/raft-boltdb"
 	"gopkg.in/alecthomas/kingpin.v2"
-	"reflect"
 )
 
 var (
@@ -134,7 +135,7 @@ func printData(log raft.Log, buf []byte, out interface{}) {
 }
 
 func printJson(log raft.Log, msgtype string, data interface{}) {
-	output := map[string]interface{}{"index": log.Index, "term": log.Term, "type": logTypes[log.Type], "msgtype": msgtype, "data": data}
+	output := map[string]interface{}{"index": log.Index, "term": log.Term, "msgtype": msgtype, "data": data}
 	if b, err := json.Marshal(output); err != nil {
 		kingpin.Errorf("Error serializing data: %s\n", err.Error())
 	} else {
